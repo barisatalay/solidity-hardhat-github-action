@@ -28,6 +28,15 @@ jobs:
             
             - name: Install Hardhat Dependencies
               run: npm ci
+
+            - name: Install Solhint
+              run: npm install -g solhint
+            
+            - name: Show Solhint version 
+              run: solhint --version
+            
+            - name: Run Lint
+              run: npm run lint:main
             
             - name: Run Hardhat Test
               env: 
