@@ -1,0 +1,38 @@
+# Reference: https://github.com/marketplace/actions/setup-node-js-environment 
+
+name: Hardhat Build
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v2
+
+            - name: Setup NodeJS 20.12.2
+              uses: actions/setup-node@v2
+              with:
+                node-version: 20.12.2
+                cache: npm
+
+            - name: Show NodeJS version 
+              run: npm --version
+            
+            - name: Install Hardhat
+              run: npm install --save-dev hardhat@2.22.3
+            
+            - name: Install Hardhat Dependencies
+              run: npm ci
+            
+            - name: Run Hardhat Test
+              env: 
+                COINGECKO_API_KEY: ${{ secrets.COINGECKO_API_KEY }}
+                REPORT_CURRENCY: ${{ secrets.REPORT_CURRENCY }}
+                REPORT_GAS: true
+                REPORT_MAIN_TOKEN: ${{ secrets.REPORT_MAIN_TOKEN }}
+              run: npx hardhat test
